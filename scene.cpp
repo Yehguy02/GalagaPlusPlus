@@ -1,12 +1,61 @@
 #include "scene.h"
-#include "playerbullet.h"
+#include "enemy.h"
 
 #include <cmath>
 
 Scene::Scene(QObject *parent)
     : QGraphicsScene(parent)
 {
+    // setup timer for spawning enemy
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &Scene::spawnEnemy);
 
+    qDebug() << "scene created";
+}
+
+Scene::~Scene() {
+
+}
+
+void Scene::gameStart() {
+    // Create background
+    QPixmap bgPixmap(":/images/space background.png");
+    QSize screenSize(800,900);
+    QPixmap scaledPixmap = bgPixmap.scaled(screenSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+
+    // Create the pixmap item with the scaled image
+    QGraphicsPixmapItem* pixItem = new QGraphicsPixmapItem(scaledPixmap);
+    addItem(pixItem);
+
+    // Center the image in the scene
+    pixItem->setPos(-scaledPixmap.width() / 2, -scaledPixmap.height() / 2);
+
+    // set player
+    setPlayer();
+
+    // start the timer for enemy to spawn
+    timer->start(3000);
+}
+
+void Scene::gameStop() {
+    qDebug() << "WOOOOOOOOOOOOOOOOOOOO0000000000000000000000000000000000000000000 GAME END WOOOOOOOOOOOOOOOOOOOOOO0000000000000000000000000000000000000000000000000000";
+
+    // stop enemy summon timer
+    timer->stop();
+
+    // remove & delete all object in scene
+    QList<QGraphicsItem*> itemList = items();
+    for (QGraphicsItem* item : itemList) {
+        // to prevent double delete error when deleteing inheritance of QObject + QGraphicsItem
+        QObject* obj = dynamic_cast<QObject*>(item);
+        if (obj) {
+            obj->deleteLater();
+        } else {
+            delete(item);
+        }
+    }
+
+    emit Scene::gameEnded();
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -14,48 +63,34 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     qreal mouseX = event->scenePos().x();
 
     // set player pos to mouseX position
-    movePlayer(mouseX);
+    player->move(mouseX);
 
     // default handling
     QGraphicsScene::mousePressEvent(event);
 }
 
 void Scene::keyPressEvent(QKeyEvent* event) {
-    if (event->key() == Qt::Key_Space) {
-        playerShoot();
+    if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
+        player->shoot();
     }
 }
 
-void Scene::setPlayer(Player* p) {
-    player = p;
+void Scene::setPlayer() {
+    player = new Player(QPixmap(":/images/spaceship.png"));
+    addItem(player);
+    player->setPos(0, 350);
+    player->setFocus(); // make player receive key event
 }
 
-void Scene::movePlayer(qreal xPos) {
-    if (!player) return;
-
-    // set moving speed depends on distant
-    qreal distance = abs(xPos - player->pos().x());
-    qreal baseSpeed = 3;
-
-    int duration = static_cast<int>(distance * baseSpeed);
-
-    // duration = std::max(100, std::min(duration, 1000)); // clamp between 100ms to 1000ms
-
-    // make animation object to animate player moving
-    QPropertyAnimation* animation = new QPropertyAnimation(player, "position");
-    animation->setDuration(duration); // in ms
-    animation->setStartValue(player->pos());
-    animation->setEndValue(QPointF(xPos, player->y()));
-    animation->start();
+void Scene::spawnEnemy() {
+    int totalEnemy = QRandomGenerator::global()->bounded(5, 15);
+    for (int i{0}; i < totalEnemy; i++) {
+        qreal xPos = LEFTXPOS + (700.0 / (totalEnemy+1)) * (i+1);
+        Enemy* e = new Enemy(this, xPos);
+        addItem(e);
+        connect(e, &Enemy::enemyHit, this, &Scene::gameStop);
+        e->move();
+    }
 }
-
-void Scene::playerShoot() {
-    if (!player) return;
-
-    Bullet* bullet = new PlayerBullet(player->pos().x(), player->pos().y(), 1000.0);
-    addItem(bullet);
-    bullet->move();
-}
-
 
 

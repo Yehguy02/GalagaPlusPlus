@@ -19,8 +19,14 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
+    void gameEndPage();
+
     Ui::Widget *ui;
     Scene* scene;
 };

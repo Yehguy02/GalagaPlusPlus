@@ -4,5 +4,6 @@
         <file>images/spaceship.png</file>
         <file>images/enemy bullet.png</file>
         <file>images/player bullet.png</file>
+        <file>images/enemy.png</file>
     </qresource>
 </RCC>

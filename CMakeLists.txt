@@ -28,6 +28,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         player.h player.cpp
         playerbullet.h playerbullet.cpp
         bullet.h bullet.cpp
+        enemy.h enemy.cpp
+        enemybullet.h enemybullet.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GalagaPlusPlus APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

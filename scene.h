@@ -5,26 +5,33 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QPropertyAnimation>
 #include <QGraphicsItem>
 #include <QKeyEvent>
+#include <QTimer>
+#include <QRandomGenerator>
 
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     explicit Scene(QObject *parent = nullptr);
+    ~Scene();
 
-    void setPlayer(Player* p);
+    void setPlayer();
+    void gameStart();
+    void gameStop();
 
 signals:
+    void gameEnded();
+
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
-    void movePlayer(qreal mouseX);
-    void playerShoot();
+    void spawnEnemy();
 
     Player* player = nullptr;
+    QTimer* timer;
+    const qreal LEFTXPOS = -350.0;
 };
 
 #endif // SCENE_H

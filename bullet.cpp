@@ -6,8 +6,3 @@ Bullet::Bullet(qreal startX, qreal startY, qreal speed, qreal endY)
 
 }
 
-Bullet::~Bullet() {
-    qDebug() << "Bullet desroyed";
-}
-
-

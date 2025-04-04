@@ -1,13 +1,15 @@
-#include "playerbullet.h"
-#include "enemy.h"
 #include "enemybullet.h"
+#include "player.h"
+#include "playerbullet.h"
 
-PlayerBullet::PlayerBullet(qreal startX, qreal startY, qreal speed)
-    : Bullet(startX, startY, speed, -500) // xPos, yPos, moveSpeed, endPoint
+#include <cmath>
+
+EnemyBullet::EnemyBullet(qreal startX, qreal startY)
+    : Bullet(startX, startY, 5, 500) // xPos, yPos, moveSpeed, endPoint
 {
     // assign graphics to player's bullet
     QSize bulletSize(10, 10);
-    QPixmap pixmap(QPixmap(":/images/player bullet.png"));
+    QPixmap pixmap(QPixmap(":/images/enemy bullet.png"));
     QPixmap scaledPixmap = pixmap.scaled(bulletSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 
     // set graphics : -scaledPixmap.width() / 2, 0
@@ -18,28 +20,29 @@ PlayerBullet::PlayerBullet(qreal startX, qreal startY, qreal speed)
     setPos(xPos, yPos);
 }
 
-PlayerBullet::~PlayerBullet() {
-    qDebug() << "Player bullet destroyed";
+EnemyBullet::~EnemyBullet() {
+    qDebug() << "Enemyyy bullet destroyed";
 }
 
-void playerBulletHit() {
-    qDebug() << "Plyrbllt hit shit!!";
-}
-
-void PlayerBullet::setY(qreal y) {
+void EnemyBullet::setY(qreal y) {
     setPos(x(), y);
 
     if (collide()) {
-        emit playerBulletHit();
-        deleteLater();
+        emit EnemyBullet::enemyBulletHit();
+        delete(this);
     }
 }
 
-void PlayerBullet::move() {
+void EnemyBullet::move() {
+    // make bullet speed constant
+    qreal distance = abs(600 - y());
+
+    int duration = static_cast<int>(distance * moveSpeed);
+
     animation = new QPropertyAnimation(this, "y");
-    animation->setDuration(moveSpeed);
+    animation->setDuration(duration);
     animation->setStartValue(yPos);
-    animation->setEndValue(-500.0);
+    animation->setEndValue(550.0);
 
     connect(animation, &QPropertyAnimation::finished, [=]() {
         scene()->removeItem(this);
@@ -49,15 +52,12 @@ void PlayerBullet::move() {
     animation->start();
 }
 
-bool PlayerBullet::collide() {
+bool EnemyBullet::collide() {
     QList<QGraphicsItem*> collideItems = collidingItems();
     for (QGraphicsItem* item : collideItems) {
-        Enemy* p = dynamic_cast<Enemy*>(item);
-        EnemyBullet* e = dynamic_cast<EnemyBullet*>(item);
-        if (p || e) {
-            delete(item);
-            return true;
-        }
+        Player* p = dynamic_cast<Player*>(item);
+        PlayerBullet* b = dynamic_cast<PlayerBullet*>(item);
+        if (p) return true;
     }
     return false;
 }

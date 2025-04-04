@@ -8,8 +8,6 @@
 #include <QPropertyAnimation>
 #include <QGraphicsScene>
 
-#include <QDebug>
-
 class PlayerBullet : public Bullet
 {
     Q_OBJECT
@@ -18,8 +16,17 @@ public:
     explicit PlayerBullet(qreal startX, qreal startY, qreal speed);
     ~PlayerBullet();
     void move() override;
+
+public slots:
+    void setY(qreal y);
+
 signals:
+
 private:
+    bool collide() override;
+
+    QPropertyAnimation* animation;
+
 };
 
 #endif // PLAYERBULLET_H
