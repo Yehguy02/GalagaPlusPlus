@@ -3,8 +3,13 @@
 #include "player.h"
 
 Enemy::Enemy(Scene* scene, qreal xPos)
-    : graphics(QPixmap(":/images/enemy.png")), xPos(xPos), scene(scene)
+    : xPos(xPos), scene(scene)
 {
+    // randomize graphics for enemy
+    int randomGraphicsIndex = QRandomGenerator::global()->bounded(1,5);
+    QString path = ":/images/enemy" + QString::number(randomGraphicsIndex) + ".png";
+    QPixmap graphics((QPixmap(path)));
+
     // set enemy size
     QSize enemySize(60, 60);
     QPixmap scaledPixmap = graphics.scaled(enemySize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
