@@ -14,5 +14,10 @@
         <file>images/Velocity Boost.png</file>
         <file>sounds/linggang guli guli.mp3</file>
         <file>sounds/waludu dan dan danali.mp3</file>
+        <file>images/galaga png.png</file>
+        <file>images/option.png</file>
+        <file>images/menu background.png</file>
+        <file>images/game over.png</file>
+        <file>images/how to play.png</file>
     </qresource>
 </RCC>
