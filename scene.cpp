@@ -39,7 +39,7 @@ void Scene::gameStart() {
     setPlayer();
 
     // start the timers
-    // enemyTimer->start(3000);
+    enemyTimer->start(3000);
     powerUpTimer->start(12000);
 }
 
