@@ -30,6 +30,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         bullet.h bullet.cpp
         enemy.h enemy.cpp
         enemybullet.h enemybullet.cpp
+        powerup.h powerup.cpp
+        health.h health.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GalagaPlusPlus APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

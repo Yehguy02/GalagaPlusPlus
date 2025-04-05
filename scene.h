@@ -20,6 +20,7 @@ public:
     void setPlayer();
     void gameStart();
     void gameStop();
+    void playerTookDamage();
 
 signals:
     void gameEnded();
@@ -28,10 +29,14 @@ private:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
     void spawnEnemy();
+    void spawnBuff();
 
     Player* player = nullptr;
-    QTimer* timer;
+    QTimer* enemyTimer;
+    QTimer* powerUpTimer;
     const qreal LEFTXPOS = -350.0;
+    int score;
+    QString scoreText;
 };
 
 #endif // SCENE_H

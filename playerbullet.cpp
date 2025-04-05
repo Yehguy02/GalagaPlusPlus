@@ -19,11 +19,11 @@ PlayerBullet::PlayerBullet(qreal startX, qreal startY, qreal speed)
 }
 
 PlayerBullet::~PlayerBullet() {
-    qDebug() << "Player bullet destroyed";
+    // qDebug() << "Player bullet destroyed";
 }
 
 void playerBulletHit() {
-    qDebug() << "Plyrbllt hit shit!!";
+    // qDebug() << "Plyrbllt hit shit!!";
 }
 
 void PlayerBullet::setY(qreal y) {

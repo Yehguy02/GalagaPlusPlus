@@ -30,11 +30,11 @@ Enemy::Enemy(Scene* scene, qreal xPos)
     connect(timer, &QTimer::timeout, this, &Enemy::shootBullet);
     timer->start(randomInt);
 
-    qDebug() << "enemy created";
+    // qDebug() << "enemy created";
 }
 
 Enemy::~Enemy() {
-    qDebug() << "Enemy dead";
+    // qDebug() << "Enemy dead";
     delete(timer);
 }
 
@@ -65,7 +65,7 @@ void Enemy::move() {
 void Enemy::shootBullet() {
     EnemyBullet* bullet = new EnemyBullet(x(), y());
     scene->addItem(bullet);
-    connect(bullet, &EnemyBullet::enemyBulletHit, scene, &Scene::gameStop);
+    connect(bullet, &EnemyBullet::enemyBulletHit, scene, &Scene::playerTookDamage);
     bullet->move();
 }
 

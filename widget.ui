@@ -29,7 +29,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="menuPage_0">
       <widget class="QTextEdit" name="textEdit">
@@ -83,6 +83,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
        <item>
         <widget class="QGraphicsView" name="graphicsView"/>
        </item>

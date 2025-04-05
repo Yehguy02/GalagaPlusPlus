@@ -1,6 +1,5 @@
 #include "enemybullet.h"
 #include "player.h"
-#include "playerbullet.h"
 
 #include <cmath>
 
@@ -21,7 +20,7 @@ EnemyBullet::EnemyBullet(qreal startX, qreal startY)
 }
 
 EnemyBullet::~EnemyBullet() {
-    qDebug() << "Enemyyy bullet destroyed";
+    // qDebug() << "Enemyyy bullet destroyed";
 }
 
 void EnemyBullet::setY(qreal y) {
@@ -56,7 +55,6 @@ bool EnemyBullet::collide() {
     QList<QGraphicsItem*> collideItems = collidingItems();
     for (QGraphicsItem* item : collideItems) {
         Player* p = dynamic_cast<Player*>(item);
-        PlayerBullet* b = dynamic_cast<PlayerBullet*>(item);
         if (p) return true;
     }
     return false;

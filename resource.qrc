@@ -4,10 +4,15 @@
         <file>images/spaceship.png</file>
         <file>images/enemy bullet.png</file>
         <file>images/player bullet.png</file>
-        <file>images/enemy.png</file>
         <file>images/enemy1.png</file>
         <file>images/enemy2.png</file>
         <file>images/enemy3.png</file>
         <file>images/enemy4.png</file>
+        <file>images/heart.png</file>
+        <file>images/Rapid Fire.png</file>
+        <file>images/Repair Kit.png</file>
+        <file>images/Velocity Boost.png</file>
+        <file>sounds/linggang guli guli.mp3</file>
+        <file>sounds/waludu dan dan danali.mp3</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "enemy.h"
+#include "powerup.h"
 
 #include <cmath>
 
@@ -7,8 +8,12 @@ Scene::Scene(QObject *parent)
     : QGraphicsScene(parent)
 {
     // setup timer for spawning enemy
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Scene::spawnEnemy);
+    enemyTimer = new QTimer(this);
+    connect(enemyTimer, &QTimer::timeout, this, &Scene::spawnEnemy);
+
+    // set up timer for spawning power up
+    powerUpTimer = new QTimer(this);
+    connect(powerUpTimer, &QTimer::timeout, this, &Scene::spawnBuff);
 
     qDebug() << "scene created";
 }
@@ -33,15 +38,17 @@ void Scene::gameStart() {
     // set player
     setPlayer();
 
-    // start the timer for enemy to spawn
-    timer->start(3000);
+    // start the timers
+    // enemyTimer->start(3000);
+    powerUpTimer->start(12000);
 }
 
 void Scene::gameStop() {
     qDebug() << "WOOOOOOOOOOOOOOOOOOOO0000000000000000000000000000000000000000000 GAME END WOOOOOOOOOOOOOOOOOOOOOO0000000000000000000000000000000000000000000000000000";
 
-    // stop enemy summon timer
-    timer->stop();
+    // stop timers
+    enemyTimer->stop();
+    powerUpTimer->stop();
 
     // remove & delete all object in scene
     QList<QGraphicsItem*> itemList = items();
@@ -78,8 +85,10 @@ void Scene::keyPressEvent(QKeyEvent* event) {
 void Scene::setPlayer() {
     player = new Player(QPixmap(":/images/spaceship.png"));
     addItem(player);
+    connect(player, &Player::playerDied, this, &Scene::gameStop);
     player->setPos(0, 350);
     player->setFocus(); // make player receive key event
+    player->displayHealth();
 }
 
 void Scene::spawnEnemy() {
@@ -88,9 +97,24 @@ void Scene::spawnEnemy() {
         qreal xPos = LEFTXPOS + (700.0 / (totalEnemy+1)) * (i+1);
         Enemy* e = new Enemy(this, xPos);
         addItem(e);
-        connect(e, &Enemy::enemyHit, this, &Scene::gameStop);
+        connect(e, &Enemy::enemyHit, this, &Scene::playerTookDamage);
         e->move();
     }
+}
+
+void Scene::spawnBuff() {
+    int randomInt = QRandomGenerator::global()->bounded(0, 701);
+
+    PowerUp* power = new PowerUp(player);
+    addItem(power);
+    power->setPos(randomInt - 350, -600);
+    power->move();
+}
+
+void Scene::playerTookDamage() {
+    if (!player) return;
+
+    player->receiveDamage();
 }
 
 
